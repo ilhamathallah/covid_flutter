@@ -1,6 +1,9 @@
+import 'package:covid_flutter/ui/hoax_screen.dart';
+import 'package:covid_flutter/ui/home_screen.dart';
+import 'package:covid_flutter/ui/hospital_screen.dart';
+import 'package:covid_flutter/ui/login_screen.dart';
 import 'package:covid_flutter/ui/news_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:covid_flutter/ui/home_screeen.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,9 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Covid-19 API',
-      home: HomeScreen(),
+      home: LoginScreen(),
       routes: {
         '/news' : (context) => NewsScreen(),
+        '/hospital' : (context) => HospitalScreen(),
       },
     );
   }

@@ -11,6 +11,12 @@ class NewsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Berita Covid-19'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_rounded),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: FutureBuilder(
         future: news,
