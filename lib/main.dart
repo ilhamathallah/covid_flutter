@@ -1,4 +1,3 @@
-import 'package:covid_flutter/ui/hoax_screen.dart';
 import 'package:covid_flutter/ui/home_screen.dart';
 import 'package:covid_flutter/ui/hospital_screen.dart';
 import 'package:covid_flutter/ui/login_screen.dart';
