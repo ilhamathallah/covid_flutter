@@ -2,20 +2,14 @@ import 'package:covid_flutter/model/hospital.dart';
 import 'package:covid_flutter/service/api_service.dart';
 import 'package:flutter/material.dart';
 
+import 'home_screen.dart';
+
 class HospitalScreen extends StatelessWidget {
   final Future<List<Hospital>?> hospitals = ApiService().getHospital();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
       body: FutureBuilder<List<Hospital>?>(
         future: hospitals,
         builder: (context, snapshot) {
@@ -199,6 +193,69 @@ class HospitalScreen extends StatelessWidget {
             );
           }
         },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        elevation: 8,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // home
+            IconButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+              icon: const Icon(
+                Icons.home_filled,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+            // hospital
+            IconButton(
+              onPressed: () {
+              },
+              icon: const Icon(
+                Icons.local_hospital_rounded,
+                color: Color(0xFFFFC1E3),
+                size: 30,
+              ),
+            ),
+            // news
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/news');
+              },
+              icon: const Icon(
+                Icons.newspaper_rounded,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+            // hoax
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+            // profile
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.person_outline_rounded,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

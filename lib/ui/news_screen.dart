@@ -1,78 +1,371 @@
-import 'package:flutter/material.dart';
 import 'package:covid_flutter/service/api_service.dart';
-import 'package:covid_flutter/model/news.dart';
+import 'package:covid_flutter/ui/hospital_screen.dart';
+import 'package:flutter/material.dart';
 
+import '../model/news.dart';
+import 'home_screen.dart';
 
 class NewsScreen extends StatelessWidget {
-  final Future news = ApiService().getNews();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Berita Covid-19'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded),
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: FutureBuilder(
-        future: news,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            print('Error: ${snapshot.error}'); // Menampilkan kesalahan
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            print('Data: ${snapshot.data}'); // Menampilkan data
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                News news = snapshot.data![index];
-                return Card(
-                  shadowColor: Colors.grey,
-                  child: Padding(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+
+          // search bar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(25, 50, 25, 20),
+            child: TextField(
+              decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.search_rounded, color: Colors.blue.shade200,),
+                  filled: true,
+                  fillColor: Colors.blue.shade50,
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade200, width: 2.0),
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey.shade200, width: 2.0),
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  hintText: 'Search',
+                  hintStyle: TextStyle(color: Colors.blue.shade200)
+              ),
+            ),
+          ),
+
+          // category scroll
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text('Trending', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text('Trending', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text('Trending', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text('Trending', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text('Trending', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text('Trending', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // content scroll horizontal
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Untuk mengatur jarak antar Card
+                children: <Widget>[
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget> [
-                        Icon(Icons.newspaper, size: 80,color: Colors.grey.shade800,),
-                        Container(
-                          width: 250,
-                          height: 150,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget> [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: 
-                                Text('${news.title}', maxLines: 2, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    child: Card(
+                      elevation: 4, // Mengatur shadow dari card
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // Mengatur border radius
+                      ),
+                      child: Container(
+                        width: 300, // Lebar card
+                        height: 220, // Tinggi card
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget> [
+                            Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget> [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('Menu tapped');
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.grey.shade100,
+                                        child: Icon(Icons.remove_red_eye_outlined, size: 15, color: Colors.grey.shade400,), // Ikon titik tiga
+                                      ),
+                                    ),
+                                    Text('10k', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: Colors.grey.shade400),),
+                                  ],
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text('${news.timestamp}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text('${news.url}', style: TextStyle(fontSize: 12), maxLines: 2,),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                                GestureDetector(
+                                  onTap: () {
+                                    print('Menu tapped');
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey.shade100,
+                                    child: Icon(Icons.more_horiz_rounded, size: 20, color: Colors.grey.shade400,), // Ikon titik tiga
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 4, // Mengatur shadow dari card
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // Mengatur border radius
+                      ),
+                      child: Container(
+                        width: 300, // Lebar card
+                        height: 220, // Tinggi card
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget> [
+                            Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget> [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('Menu tapped');
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.grey.shade100,
+                                        child: Icon(Icons.remove_red_eye_outlined, size: 22, color: Colors.grey.shade400,), // Ikon titik tiga
+                                      ),
+                                    ),
+                                    Text('10k', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.grey.shade400),),
+                                  ],
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    print('Menu tapped');
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey.shade100,
+                                    child: Icon(Icons.more_horiz_rounded, size: 20, color: Colors.grey.shade400,), // Ikon titik tiga
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 4, // Mengatur shadow dari card
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // Mengatur border radius
+                      ),
+                      child: Container(
+                        width: 300, // Lebar card
+                        height: 220, // Tinggi card
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget> [
+                            Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget> [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('Menu tapped');
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.grey.shade100,
+                                        child: Icon(Icons.remove_red_eye_outlined, size: 22, color: Colors.grey.shade400,), // Ikon titik tiga
+                                      ),
+                                    ),
+                                    Text('10k', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.grey.shade400),),
+                                  ],
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    print('Menu tapped');
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey.shade100,
+                                    child: Icon(Icons.more_horiz_rounded, size: 20, color: Colors.grey.shade400,), // Ikon titik tiga
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 4, // Mengatur shadow dari card
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // Mengatur border radius
+                      ),
+                      child: Container(
+                        width: 300, // Lebar card
+                        height: 220, // Tinggi card
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget> [
+                            Text('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget> [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print('Menu tapped');
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.grey.shade100,
+                                        child: Icon(Icons.remove_red_eye_outlined, size: 22, color: Colors.grey.shade400,), // Ikon titik tiga
+                                      ),
+                                    ),
+                                    Text('10k', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.grey.shade400),),
+                                  ],
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    print('Menu tapped');
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.grey.shade100,
+                                    child: Icon(Icons.more_horiz_rounded, size: 20, color: Colors.grey.shade400,), // Ikon titik tiga
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+
+        ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        elevation: 8,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            // home
+            IconButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                      (Route<dynamic> route) => false,
                 );
               },
-            );
-          } else {
-            return Center(child: Text('Tidak ada data tersedia'));
-          }
-        },
+              icon: const Icon(
+                Icons.home_filled,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+            // hospital
+            IconButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HospitalScreen()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+              icon: const Icon(
+                Icons.local_hospital_rounded,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+
+            // news
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.newspaper_rounded,
+                color: Color(0xFFB0BEC5),
+                size: 30,
+              ),
+            ),
+            // hoax
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.warning_amber_rounded,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.person_outline_rounded,
+                color: Colors.black54,
+                size: 30,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
